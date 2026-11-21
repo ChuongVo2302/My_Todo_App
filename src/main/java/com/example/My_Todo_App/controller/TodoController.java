@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,7 +58,7 @@ public class TodoController {
             Todo existingTodo = result.get();
             existingTodo.setTitle(todo.getTitle());
             existingTodo.setDescription(todo.getDescription());
-            existingTodo.setStatus(todo.getStatus());
+            existingTodo.setStatus(todo.isStatus());
 
             return ResponseEntity.ok(existingTodo);
         }

@@ -33,7 +33,7 @@ public class Todo {
     public void setDescription(String description) {
         this.description = description;
     }
-    public boolean getStatus() {
+    public boolean isStatus() {
         return status;
     }
     public void setStatus(boolean status) {
