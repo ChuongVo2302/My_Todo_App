@@ -1,5 +1,7 @@
 package com.example.My_Todo_App.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,4 +15,6 @@ public interface TodoMapper {
     Todo toEntity(TodoRequestDTO todoRequestDTO);
 
     TodoResponseDTO toResponse(Todo todo);
+
+    List<TodoResponseDTO> toResponseList(List<Todo> todo);
 }

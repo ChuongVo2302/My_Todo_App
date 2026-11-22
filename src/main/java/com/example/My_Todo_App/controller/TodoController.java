@@ -2,6 +2,8 @@ package com.example.My_Todo_App.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.My_Todo_App.dto.TodoRequestDTO;
+import com.example.My_Todo_App.dto.TodoResponseDTO;
 import com.example.My_Todo_App.model.Todo;
 import com.example.My_Todo_App.service.TodoService;
 
@@ -33,13 +35,13 @@ public class TodoController {
     }
 
     @GetMapping("/api/todos")
-    public List<Todo> getAllTodos() {
+    public List<TodoResponseDTO> getAllTodos() {
         return todoService.getAllTodo();
     }
 
     @GetMapping("/api/todos/{id}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
-        Optional<Todo> existingTodo = todoService.getTodoById(id);
+    public ResponseEntity<TodoResponseDTO> getTodoById(@PathVariable Long id) {
+        Optional<TodoResponseDTO> existingTodo = todoService.getTodoById(id);
         if(existingTodo.isPresent()){
             return ResponseEntity.ok(existingTodo.get());
         }
@@ -47,13 +49,13 @@ public class TodoController {
     }
     
     @PostMapping("/api/todos")
-    public ResponseEntity<Todo> addTodo(@RequestBody Todo todo) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(todoService.addTodo(todo));
+    public ResponseEntity<TodoResponseDTO> addTodo(@RequestBody TodoRequestDTO todoRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(todoService.addTodo(todoRequestDTO));
     }
 
     @PutMapping("/api/todos/{id}")
-    public ResponseEntity<Todo> putTodo(@PathVariable Long id, @RequestBody Todo todo) {
-        Optional<Todo> existingTodo = todoService.putTodo(id, todo);
+    public ResponseEntity<TodoResponseDTO> putTodo(@PathVariable Long id, @RequestBody TodoRequestDTO todoRequestDTO) {
+        Optional<TodoResponseDTO> existingTodo = todoService.putTodo(id, todoRequestDTO);
         if(existingTodo.isPresent()){
             return ResponseEntity.ok(existingTodo.get());
         }

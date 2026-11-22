@@ -5,44 +5,54 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.My_Todo_App.dto.TodoRequestDTO;
+import com.example.My_Todo_App.dto.TodoResponseDTO;
+import com.example.My_Todo_App.mapper.TodoMapper;
 import com.example.My_Todo_App.model.Todo;
 import com.example.My_Todo_App.repository.TodoRepository;
 
 @Service
 public class TodoService {
     private final TodoRepository todoRepository;
+    private final TodoMapper todoMapper; 
 
-    public TodoService(TodoRepository todoRepository){
+    public TodoService(TodoRepository todoRepository, TodoMapper todoMapper){
         this.todoRepository = todoRepository;
+        this.todoMapper = todoMapper;
     }
 
     public String getHello(){
         return "Hello world";
     }
 
-    public List<Todo> getAllTodo(){
-        return todoRepository.findAll();
+    public List<TodoResponseDTO> getAllTodo(){
+        return todoMapper.toResponseList(todoRepository.findAll());
     }
 
-    public Optional<Todo> getTodoById(Long id){
-        return todoRepository.findById(id);
-    }
-
-    public Todo addTodo(Todo todo){
-        return todoRepository.save(todo);
-    }
-
-    public Optional<Todo> putTodo(Long id, Todo todo){
+    public Optional<TodoResponseDTO> getTodoById(Long id){
         Optional<Todo> existingTodo = todoRepository.findById(id);
         if(existingTodo.isPresent()){
-            Todo newTodo = existingTodo.get();
+            return Optional.of(todoMapper.toResponse(existingTodo.get()));
+        }
+        return Optional.empty();
+    }
 
-            newTodo.setTitle(todo.getTitle());
-            newTodo.setDescription(todo.getDescription());
-            newTodo.setStatus(todo.isStatus());
-            todoRepository.save(newTodo);
+    public TodoResponseDTO addTodo(TodoRequestDTO todoRequestDTO){
+        Todo todo = todoMapper.toEntity(todoRequestDTO);
+        return todoMapper.toResponse(todoRepository.save(todo));
+    }
 
-            return Optional.of(newTodo);
+    public Optional<TodoResponseDTO> putTodo(Long id, TodoRequestDTO todoRequestDTO){
+        Optional<Todo> existingTodo = todoRepository.findById(id);
+        if(existingTodo.isPresent()){
+            Todo foundTodo = existingTodo.get();
+
+            foundTodo.setTitle(todoRequestDTO.title());
+            foundTodo.setDescription(todoRequestDTO.description());
+            foundTodo.setStatus(todoRequestDTO.status());
+            todoRepository.save(foundTodo);
+
+            return Optional.of(todoMapper.toResponse(foundTodo));
         }
 
         return Optional.empty();
