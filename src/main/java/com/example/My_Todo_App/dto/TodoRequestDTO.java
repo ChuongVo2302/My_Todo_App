@@ -1,5 +1,7 @@
 package com.example.My_Todo_App.dto;
 
-public record TodoRequestDTO(String title, String description, boolean status) {
+import jakarta.validation.constraints.NotBlank;
+
+public record TodoRequestDTO(@NotBlank String title, @NotBlank String description, boolean status) {
     
 }

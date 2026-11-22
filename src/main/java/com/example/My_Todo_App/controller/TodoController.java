@@ -4,8 +4,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.My_Todo_App.dto.TodoRequestDTO;
 import com.example.My_Todo_App.dto.TodoResponseDTO;
-import com.example.My_Todo_App.model.Todo;
 import com.example.My_Todo_App.service.TodoService;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,12 +50,12 @@ public class TodoController {
     }
     
     @PostMapping("/api/todos")
-    public ResponseEntity<TodoResponseDTO> addTodo(@RequestBody TodoRequestDTO todoRequestDTO) {
+    public ResponseEntity<TodoResponseDTO> addTodo(@Valid @RequestBody TodoRequestDTO todoRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(todoService.addTodo(todoRequestDTO));
     }
 
     @PutMapping("/api/todos/{id}")
-    public ResponseEntity<TodoResponseDTO> putTodo(@PathVariable Long id, @RequestBody TodoRequestDTO todoRequestDTO) {
+    public ResponseEntity<TodoResponseDTO> putTodo(@PathVariable Long id, @Valid @RequestBody TodoRequestDTO todoRequestDTO) {
         Optional<TodoResponseDTO> existingTodo = todoService.putTodo(id, todoRequestDTO);
         if(existingTodo.isPresent()){
             return ResponseEntity.ok(existingTodo.get());
@@ -69,5 +70,4 @@ public class TodoController {
         }
         return ResponseEntity.notFound().build();
     }
-
 }
